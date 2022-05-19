@@ -25,6 +25,11 @@
     <ul class="right hide-on-med-and-down">
       <li><a class="modal-trigger" data-target="modal1">Search</a></li>
       <li><a href="{% url 'contact' %}">Contact</a></li>
+      <li><a href="{% if user.is_authenticated %}{% else %}{% url 'login' %}{% endif %}">{% if user.is_authenticated %}{{ user.username }}{% else %}Please log in{% endif %}<i class="material-icons right">account_circle</i></a></li>
+      
+      {% if user.is_authenticated %}
+      <li><a href="{% url 'logout' %}" data-target="dropdown1">Log out<i class="material-icons right">settings_power</i></a></li>
+      {% endif %}
       <!-- Dropdown Trigger -->
       <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Categories<i class="material-icons right">arrow_drop_down</i></a></li>
     </ul>

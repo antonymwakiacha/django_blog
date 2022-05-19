@@ -148,3 +148,9 @@ CKEDITOR_CONFIGS = {
 }
 
 CKEDITOR_UPLOAD_PATH ='ckeditor/'
+
+LOGIN_REDIRECT_URL = 'profile'
+
+LOGOUT_REDIRECT_URL = 'index'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

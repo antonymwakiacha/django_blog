@@ -15,6 +15,12 @@
       {% endif %}
     </div>
   </div>
+<form id="favoriteform" method="POST" action="">
+  {% csrf_token %}
+  <a href="javascript:void" onclick="document.getElementById('favoriteform').submit();" class="btn-floating btn-large {% if favorited is True%} grey {% else %}red {% endif %} right tooltipped" data-position="left" data-tooltip="{% if favorited is True%} Remove from Favorites {% else %}Add to Favorites{% endif %}" >
+    <i class="large material-icons">favorite</i>
+  </a>
+</form>
 {% endblock %}
 
  

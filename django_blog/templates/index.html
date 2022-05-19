@@ -13,13 +13,14 @@
             <div class="card-image">
               {% if article.picture %}
               <a href="{{ article.get_absolute_url }}"><img src="{{ article.picture.url }}"></a>
-              <a href="{{ article.get_absolute_url }}"><span class="card-title">{{ article.title }}</span></a>
+              <!-- <a href="{{ article.get_absolute_url }}"><span class="card-title">{{ article.title }}</span></a> -->
               {% else %}
               <img src="{% static 'img/default-image.jpg' %}">
               {% endif %}
+              <a href="{{ article.get_absolute_url }}"><span class="card-title">{{ article.title }}</span></a>
             </div>
             <div class="card-content">
-              <p>{{ article.content| truncatechars:250 }}</p>
+              <p>{{ article.content| truncatechars:250 | safe}}</p>
             </div>
             <div class="card-action">
               <a href="{{ article.get_absolute_url }}">Read more</a>

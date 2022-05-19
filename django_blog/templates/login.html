@@ -11,17 +11,27 @@
       <h3>Login</h3>
       <div class="row">
         <div class="input-field col s12">
-          <input id="email" type="email" class="validate">
-          <label for="email">Email</label>
+          {{ form.username }}
+          <!-- <input id="email" type="email" class="validate"> -->
+          <label for="username">Username</label>
         </div>
       </div>
       <div class="row">
         <div class="input-field col s12">
-          <input id="password" type="password" class="validate">
+          {{ form.password }}
+          <!-- <input id="password" type="password" class="validate"> -->
           <label for="password">Password</label>
         </div>
       </div>
-      <button class="waves-effect waves-light btn"><i class="material-icons left">send</i>Login</button>
+      {% if form.errors %}
+      <div class="row">
+        <div class="col s12">
+            <span style="color:red; font-weight:bold;">Your username or password did not match</span>
+        </div>
+      </div>
+      {% endif %}
+      <button type="submit" value="login" class="waves-effect waves-light btn"><i class="material-icons left">send</i>Login</button>
+      <input type="hidden" name="next" value="{{ next }}">
       <button class="waves-effect waves-light btn"><i class="material-icons left">account_circle</i>Create an account</button>
     </form>
   </div>

@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from authy.models import Profile
 
 def ForbiddenUsers(value):
     forbidden_users = ['admin','css','js','authenticate','login','logout','administrator','root','email','user','join','sql','static','python','delete']
@@ -45,3 +46,38 @@ class SignUpForm(forms.ModelForm):
         if password != confirm_password:
             self._errors['password'] = self.error_class(['Passwords do not match. Try again'])
         return self.cleaned_data
+
+class ChangePasswordForm(forms.ModelForm):
+    id = forms.CharField(widget=forms.HiddenInput)
+    old_password = forms.CharField(widget=forms.PasswordInput(), label="old password", required=True)
+    new_password = forms.CharField(widget=forms.PasswordInput(), label="New password", required=True)
+    confirm_password = forms.CharField(widget=forms.PasswordInput(), label="Confirm new password", required=True)
+
+    class Meta:
+        model = User
+        fields =('id','old_password','new_password','confirm_password')
+
+    def clean(self):
+        super(ChangePasswordForm, self).clean()
+        id = self.cleaned_data.get('id')
+        old_password = self.cleaned_data.get('old_password')
+        new_password = self.cleaned_data.get('new_password')
+        confirm_password = self.cleaned_data.get('confirm_password')
+        user = User.objects.get(pk=id)
+        if not user.check_password(old_password):
+            self.errors['old_password'] =self.error_class(['Old password do not match'])
+        if new_password != confirm_password:
+            self.errors['new_password'] =self.error_class(['Passwords do not match'])
+        return self.cleaned_data
+
+class EditProfileForm(forms.ModelForm):
+    picture = forms.ImageField(required=False)
+    first_name = forms.CharField(widget=forms.TextInput(),max_length=50, required=False,)
+    last_name = forms.CharField(widget=forms.TextInput(),max_length=50, required=False,)
+    location = forms.CharField(widget=forms.TextInput(),max_length=25, required=False,)
+    url = forms.URLField(widget=forms.TextInput(),max_length=60, required=False,)
+    profile_info = forms.CharField(widget=forms.TextInput(),max_length=260, required=False,)
+
+    class Meta:
+        model = Profile
+        fields =('picture','first_name','last_name','location','url','profile_info')

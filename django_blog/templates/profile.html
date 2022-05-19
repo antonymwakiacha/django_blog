@@ -31,7 +31,7 @@
             <div class="card-image">
                 <img src="{% static 'img/profile_banner.jpg' %}">
                 <img id="img-circle-custom-profile" src="{% static 'img/p.jpg' %}">
-              <h1 style="font-weight:bold;" class="card-title">Card Title</h1>
+              <h1 style="font-weight:bold;" class="card-title">{% if profile.first_name %} {{ profile.first_name }} {{ profile.last_name }} {% endif %}</h1>
             </div>
             <div class="card-action">
                 <h6 style="font-weight:bold;">Location:</h6>
@@ -45,49 +45,31 @@
              <h1 style="font-weight:bold;" class="card-title">Favorites articles</h1>
 
              <div class="row">
+
+              {% for article in articles %}
                 <div class="col s12 m4">
                   <div class="card">
                     <div class="card-image">
-                      <img src="{% static 'img/background1.jpg' %}">
-                      <span class="card-title">Card Title</span>
+
+                      {% if article.picture %}
+                         <a href="{{ article.get_absolute_url }}"><img src="{{ article.picture.url }}"></a>
+                         <!-- <a href="{{ article.get_absolute_url }}"><span class="card-title">{{ article.title }}</span></a> -->
+                      {% else %}
+                        <img src="{% static 'img/default-image.jpg' %}">
+                      {% endif %}
+                      <a href="{{ article.get_absolute_url }}"><span class="card-title">{{ article.title }}</span></a>
+                      <!-- <span class="card-title">Card Title</span> -->
                     </div>
                     <div class="card-content">
-                      <p>I am a very simple card. I am good at containing small bits of information.
-                      I am convenient because I require little markup to use effectively.</p>
+                      <p>{{ article.content| truncatechars:150 | safe }}</p>
                     </div>
-                  
+                    <div class="card-action">
+                      <a href="{{ article.get_absolute_url }}">Read more</a>
+                    </div>
                   </div>
                 </div>
-
-
-                <div class="col s12 m4">
-                    <div class="card">
-                      <div class="card-image">
-                        <img src="{% static 'img/background1.jpg' %}">
-                        <span class="card-title">Card Title</span>
-                      </div>
-                      <div class="card-content">
-                        <p>I am a very simple card. I am good at containing small bits of information.
-                        I am convenient because I require little markup to use effectively.</p>
-                      </div>
-                    
-                    </div>
-                  </div>
-
-                  <div class="col s12 m4">
-                    <div class="card">
-                      <div class="card-image">
-                        <img src="{% static 'img/background1.jpg' %}">
-                        <span class="card-title">Card Title</span>
-                      </div>
-                      <div class="card-content">
-                        <p>I am a very simple card. I am good at containing small bits of information.
-                        I am convenient because I require little markup to use effectively.</p>
-                      </div>
-                    
-                    </div>
-                  </div>
-
+                 
+              {% endfor %}
 
               </div>
 
@@ -98,3 +80,15 @@
     
 
 {% endblock %}
+
+{% block pagination %}
+  <ul class="pagination center-align">
+    {% if articles.has_previous %}
+     <a href="?page={{ articles.previous_page_number }}" class="waves-effect waves-light btn"><i class="material-icons left">arrow_back</i>Back</a>
+    {% endif %}
+
+    {% if articles.has_next %}
+     <a href="?page={{ articles.next_page_number }}" class="waves-effect waves-light btn"><i class="material-icons right">add</i>Load more</a>
+     {% endif %}
+  </ul>
+  {% endblock %}

@@ -7,6 +7,7 @@ from django.db.models import Q
 from post.forms import ContactForm
 from django.utils import timezone
 from django.core.paginator import Paginator
+from authy.models import Profile
 
 # def helloworld(request):
 #     return HttpResponse('hello world')
@@ -77,11 +78,27 @@ def tags(request, tag_slug):
 
 def PostDetails(request, post_slug):
     article = get_object_or_404(Post, slug=post_slug)
+    user = request.user.id
+    profile = Profile.objects.get(user__id=user)
+
+    #For the color of the favorite button
+    if profile.favorites.filter(slug=post_slug).exists():
+        favorited = True
+    else:
+        favorited = False
+
+    #Handle the post to add the article to user favorites
+    if request.method == 'POST':
+        if profile.favorites.filter(slug=post_slug).exists():
+            profile.favorites.remove(article)
+        else:
+            profile.favorites.add(article)
 
     template = loader.get_template('post_details.html')
 
     context ={
         'article':article,
+        'favorited':favorited,
     }
 
     return HttpResponse(template.render(context, request))
