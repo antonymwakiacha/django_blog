@@ -30,17 +30,40 @@
           <div class="card">
             <div class="card-image">
                 <img src="{% static 'img/profile_banner.jpg' %}">
+                {% if profile.picture %}
+                <a href="{{ profile.get_absolute_url }}"><img id="img-circle-custom-profile" src="{{ profile.picture.url }}"></a>
+                <!-- <a href="{{ article.get_absolute_url }}"><span class="card-title">{{ article.title }}</span></a> -->
+                {% else %}
                 <img id="img-circle-custom-profile" src="{% static 'img/p.jpg' %}">
+                {% endif %}
+
               <h1 style="font-weight:bold;" class="card-title">{% if profile.first_name %} {{ profile.first_name }} {{ profile.last_name }} {% endif %}</h1>
             </div>
+
+
             <div class="card-action">
+              {% if user.is_authenticated and user == profile.user %}
+              <a href="{% url 'edit-profile' %}" class="waves-effect waves-teal btn right">Edit Profile</a>
+
+              <!-- <button class="btn waves-effect waves-light right" type="submit" name="action">Edit Profile</button>
+             -->
+
+              {% endif %}
+                {% if profile.first_name %}     
                 <h6 style="font-weight:bold;">Location:</h6>
-                <span>USA</span>
+                <span>{{ profile.location }} </span>
+                {% endif %} 
+
+                {% if profile.url %} 
                 <h6 style="font-weight:bold;">URL:</h6>
-                <span>https://github.com/antonymwakiacha</span>
+                <span>{{ profile.url }}</span>
+                {% endif %} 
+
+                {% if profile.profile_info %} 
                 <h6 style="font-weight:bold;">BIO:</h6>
-                <span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</span>
-            </div>
+                <span>  {{ profile.profile_info }} </span> 
+                {% endif %}
+
             <div class="card-content">
              <h1 style="font-weight:bold;" class="card-title">Favorites articles</h1>
 
